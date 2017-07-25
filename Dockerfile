@@ -2,9 +2,8 @@ FROM alpine:3.6
 MAINTAINER Binghong Liang <liangbinghong@gmail.com>
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV LOCAL_RESOURCES 2048,.5,1.0
 ENV BAZEL_VERSION 0.5.2
-ENV TENSORFLOW_VERSION 1.2.0
+ENV TENSORFLOW_VERSION 1.2.1
 
 RUN apk upgrade --update \
     && apk add bash python2 py2-pip python3 freetype libpng libjpeg-turbo \
@@ -25,8 +24,7 @@ RUN cd /tmp \
     && bash compile.sh \
     && cp -p output/bazel /usr/bin/ 
 
-RUN : build TensorFlow pip package \
-    && cd /tmp \
+RUN cd /tmp \
     && curl -SL https://github.com/tensorflow/tensorflow/archive/v${TENSORFLOW_VERSION}.tar.gz \
         | tar xzf - \
     && cd tensorflow-${TENSORFLOW_VERSION} \
@@ -46,13 +44,13 @@ RUN : build TensorFlow pip package \
         TF_NEED_OPENCL=0 \
         TF_NEED_CUDA=0 \
         bash configure \
-    && bazel build -c opt --local_resources ${LOCAL_RESOURCES} //tensorflow/tools/pip_package:build_pip_package
+    && bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
 
 RUN ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg 
 
 RUN cd \
     && pip3 install --no-cache-dir /tmp/tensorflow_pkg/tensorflow-${TENSORFLOW_VERSION}-cp36-cp36m-linux_x86_64.whl \
-    && pip3 install --no-cache-dir pandas scipy scikit-learn keras tensorlayer pillow \
+    && pip3 install --no-cache-dir pandas scipy scikit-learn keras tensorlayer pillow requests cython \
     && pip2 install --no-cache-dir supervisor
 
 RUN apk del build-dependencies \
