@@ -11,7 +11,9 @@ RUN apk upgrade --update \
         python3-dev freetype-dev libpng-dev libjpeg-turbo-dev musl-dev openblas-dev \
         gcc g++ make cmake swig linux-headers openjdk8 patch perl rsync zip
 
-RUN pip3 install --no-cache-dir numpy
+RUN rm -rf /usr/bin/python \
+    && ln -s /usr/bin/python3 /usr/bin/python \
+    && pip3 install --no-cache-dir numpy
 
 RUN cd /tmp \
     && pip3 install --no-cache-dir wheel \
