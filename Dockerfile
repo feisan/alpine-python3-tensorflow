@@ -6,7 +6,7 @@ ENV BAZEL_VERSION 0.5.2
 ENV TENSORFLOW_VERSION 1.2.1
 
 RUN apk upgrade --update \
-    && apk add bash python2 py2-pip python3 freetype libpng libjpeg-turbo \
+    && apk add bash python2 py2-pip python3 freetype libpng libjpeg-turbo libstdc++ openblas \
     && apk add --no-cache --virtual=build-dependencies wget curl ca-certificates unzip sed \
         python3-dev freetype-dev libpng-dev libjpeg-turbo-dev musl-dev openblas-dev \
         gcc g++ make cmake swig linux-headers openjdk8 patch perl rsync zip
