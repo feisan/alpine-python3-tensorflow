@@ -46,9 +46,8 @@ RUN cd /tmp \
         TF_NEED_OPENCL=0 \
         TF_NEED_CUDA=0 \
         bash configure \
-    && bazel build --config opt --local_resources 2048,.5,1.0 //tensorflow/tools/pip_package:build_pip_package
-
-RUN ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg 
+    && bazel build --config opt --local_resources 2048,.5,1.0 //tensorflow/tools/pip_package:build_pip_package \
+    && ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg 
 
 RUN cd \
     && pip3 install --no-cache-dir /tmp/tensorflow_pkg/tensorflow-${TENSORFLOW_VERSION}-cp36-cp36m-linux_x86_64.whl \
