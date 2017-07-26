@@ -46,7 +46,7 @@ RUN cd /tmp \
         TF_NEED_OPENCL=0 \
         TF_NEED_CUDA=0 \
         bash configure \
-    && bazel build -c opt //tensorflow/tools/pip_package:build_pip_package
+    && bazel build --config opt --local_resources 2048,.5,1.0 //tensorflow/tools/pip_package:build_pip_package
 
 RUN ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg 
 
