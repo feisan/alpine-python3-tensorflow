@@ -1,7 +1,8 @@
 # alpine-python3-tensorflow
 
-## python 3.6.1 with
+`docker pull feisan/alpine-python3-tensorflow`
 
+## python 3.6.1 with
 
 ```bleach==1.5.0
 certifi==2017.11.5
