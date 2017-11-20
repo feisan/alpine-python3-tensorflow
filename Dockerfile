@@ -2,8 +2,8 @@ FROM alpine:3.6
 MAINTAINER Binghong Liang <liangbinghong@gmail.com>
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV BAZEL_VERSION 0.5.3
-ENV TENSORFLOW_VERSION 1.3.0
+ENV BAZEL_VERSION 0.7.0
+ENV TENSORFLOW_VERSION 1.4.0
 
 COPY others/FALCONN-2.0.0.tar.gz /tmp/FALCONN-2.0.0.tar.gz
 RUN apk upgrade --update \
@@ -36,7 +36,6 @@ RUN apk upgrade --update \
     && PYTHON_BIN_PATH=/usr/bin/python \
         PYTHON_LIB_PATH=/usr/lib/python3.6/site-packages \
         CC_OPT_FLAGS="-march=native" \
-        TF_NEED_MKL=0 \
         TF_NEED_JEMALLOC=1 \
         TF_NEED_GCP=0 \
         TF_NEED_HDFS=0 \
@@ -45,6 +44,8 @@ RUN apk upgrade --update \
         TF_NEED_OPENCL=0 \
         TF_NEED_CUDA=0 \
         TF_NEED_MPI=0 \
+        TF_NEED_S3=0 \
+        TF_NEED_GDR=0 \
         bash configure \
     && bazel build --config opt --local_resources 4096,.5,1.0 //tensorflow/tools/pip_package:build_pip_package \
     && ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg \
