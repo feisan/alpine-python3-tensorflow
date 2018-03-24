@@ -2,14 +2,14 @@ FROM alpine:3.7
 MAINTAINER Binghong Liang <liangbinghong@gmail.com>
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV BAZEL_VERSION 0.7.0
-ENV TENSORFLOW_VERSION 1.5.1
+ENV BAZEL_VERSION 0.9.0
+ENV TENSORFLOW_VERSION 1.6.0
 
 RUN true \
     && apk upgrade --update \
-    && apk add bash python2 py2-pip python3 freetype libpng libjpeg-turbo libstdc++ openblas \
+    && apk add bash python2 py2-pip python3 freetype libpng libjpeg-turbo libstdc++ openblas libexecinfo \
     && apk add --no-cache --virtual=build-dependencies wget curl ca-certificates unzip sed \
-    python3-dev freetype-dev libpng-dev libjpeg-turbo-dev musl-dev openblas-dev \
+    python3-dev freetype-dev libpng-dev libjpeg-turbo-dev musl-dev openblas-dev  libexecinfo-dev \
     gcc g++ make cmake swig linux-headers openjdk8 patch perl rsync zip tar gzip \
     && rm -rf /usr/bin/python \
     && ln -s /usr/bin/python3 /usr/bin/python \
@@ -28,6 +28,8 @@ RUN true \
     | tar xzf - \
     && cd tensorflow-${TENSORFLOW_VERSION} \
     && sed -i -e '/JEMALLOC_HAVE_SECURE_GETENV/d' third_party/jemalloc.BUILD \
+    && sed -i -e '/#define TF_GENERATE_BACKTRACE/d' tensorflow/core/platform/default/stacktrace.h \
+    && sed -i -e '/#define TF_GENERATE_STACKTRACE/d' tensorflow/core/platform/stacktrace_handler.cc \
     && PYTHON_BIN_PATH=/usr/bin/python \
     PYTHON_LIB_PATH=/usr/lib/python3.6/site-packages \
     CC_OPT_FLAGS="-march=native" \
@@ -42,7 +44,7 @@ RUN true \
     TF_NEED_S3=0 \
     TF_NEED_GDR=0 \
     bash configure \
-    && bazel build --config opt --local_resources 8192,.9,1.0 //tensorflow/tools/pip_package:build_pip_package \
+    && bazel build --config opt --local_resources 4096,.5,1.0 //tensorflow/tools/pip_package:build_pip_package \
     && ./bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg \
     && cd \
     && pip3 install --no-cache-dir /tmp/tensorflow_pkg/tensorflow-${TENSORFLOW_VERSION}-cp36-cp36m-linux_x86_64.whl \
