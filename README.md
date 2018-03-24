@@ -5,12 +5,15 @@
 ## python 3.6.3 with
 
 ```absl-py==0.1.12
+astor==0.6.2
 bleach==1.5.0
 certifi==2018.1.18
 chardet==3.0.4
 cycler==0.10.0
 Cython==0.28.1
 decorator==4.2.1
+gast==0.2.0
+grpcio==1.10.0
 html5lib==0.9999999
 idna==2.6
 Keras==2.1.5
@@ -32,9 +35,10 @@ scikit-image==0.13.1
 scikit-learn==0.19.1
 scipy==1.0.0
 six==1.11.0
-tensorflow==1.5.1
-tensorflow-tensorboard==1.5.1
+tensorboard==1.6.0
+tensorflow==1.6.0
 tensorlayer==1.8.3
+termcolor==1.1.0
 urllib3==1.22
 Werkzeug==0.14.1
 
